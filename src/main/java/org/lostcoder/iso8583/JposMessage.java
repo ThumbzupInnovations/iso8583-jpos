@@ -24,18 +24,28 @@ import org.jpos.iso.packager.BASE24Packager;
 import org.lostcoder.iso8583.exception.Iso8583Exception;
 import org.lostcoder.iso8583.packager.AS2805Packager;
 
-/**
- * Created by Sean on 2016/09/15.
- */
-public class JposMessage extends ISOMsg implements Iso8583Message {
+class JposMessage extends ISOMsg implements Iso8583Message {
 
-    byte[] packCache = null;
+    private byte[] packCache = null;
 
     private boolean modified;
 
-    public JposMessage(String messageType, AcquirerProtocol protocol) {
+    JposMessage(String messageType, AcquirerProtocol protocol) {
         super(messageType);
         setPackager(protocol);
+    }
+
+    public JposMessage() {
+    }
+
+    JposMessage(byte[] isoData, AcquirerProtocol protocol) throws Iso8583Exception {
+        setPackager(protocol);
+        try {
+            unpack(isoData);
+        } catch (ISOException e) {
+            throw new Iso8583Exception(e);
+        }
+        modified = true;
     }
 
     private void setPackager(AcquirerProtocol protocol) {
@@ -49,16 +59,7 @@ public class JposMessage extends ISOMsg implements Iso8583Message {
         }
     }
 
-    public JposMessage(byte[] isoData, AcquirerProtocol protocol) throws Iso8583Exception {
-        setPackager(protocol);
-        try {
-            unpack(isoData);
-        } catch (ISOException e) {
-            throw new Iso8583Exception(e);
-        }
-        modified = true;
-    }
-
+    @Override
     public void setField(int no, String value) throws Iso8583Exception {
         modified = true;
         try {
@@ -68,6 +69,7 @@ public class JposMessage extends ISOMsg implements Iso8583Message {
         }
     }
 
+    @Override
     public void setField(int no, byte[] value) throws Iso8583Exception {
         modified = true;
         try {

@@ -24,11 +24,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AS2805Packager extends AS2805BasePackager {
-    
+
+    private final static Map<Integer, ISOFieldPackager> fieldMap = new HashMap<>();
+    private final static ISOFieldPackager[] fields = new ISOFieldPackager[128 + 1];
     private static final boolean pad = true;
-    final static Map<Integer, ISOFieldPackager> fieldMap = new HashMap<>();
-    final static ISOFieldPackager[] fields = new ISOFieldPackager[128 + 1];
-    {
+
+    static {
         fieldMap.put(FieldConstants.FIELD_0, new IFB_NUMERIC(4, "Message Type Indicator", pad));
         fieldMap.put(FieldConstants.FIELD_1, new IFB_BITMAP(16, "Bitmap, Extended"));
         fieldMap.put(FieldConstants.FIELD_2, new IFB_LLNUM(19, "Primary Account Number", !pad));

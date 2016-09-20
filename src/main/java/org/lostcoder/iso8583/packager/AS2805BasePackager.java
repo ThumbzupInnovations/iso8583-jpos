@@ -49,94 +49,85 @@ public abstract class AS2805BasePackager implements ISOPackager {
 
     @Override
     public byte[] pack(ISOComponent m) throws ISOException {
-        try {
-            if (m.getComposite() != m)
-                throw new ISOException("Can't call packager on non Composite");
+        if (m.getComposite() != m)
+            throw new ISOException("Can't call packager on non Composite");
 
-            ISOComponent c;
-            ArrayList<byte[]> v = new ArrayList<byte[]>(128);
-            Map<?, ?> fields = m.getChildren();
-            int len = 0;
-            int first = getFirstField();
+        ISOComponent c;
+        ArrayList<byte[]> v = new ArrayList<>(128);
+        Map<?, ?> fields = m.getChildren();
+        int len = 0;
+        int first = getFirstField();
 
-            c = (ISOComponent) fields.get(0);
-            byte[] b;
+        c = (ISOComponent) fields.get(0);
+        byte[] b;
 
-            if (m instanceof ISOMsg && headerLength > 0) {
-                byte[] h = ((ISOMsg) m).getHeader();
-                if (h != null)
-                    len += h.length;
-            }
-
-            if (first > 0 && c != null) {
-                b = fld[0].pack(c);
-                len += b.length;
-                v.add(b);
-            }
-
-            if (emitBitMap()) {
-                // BITMAP (-1 in HashTable)
-                c = (ISOComponent) fields.get(-1);
-                b = getBitMapfieldPackager().pack(c);
-                len += b.length;
-                v.add(b);
-            }
-
-            // if Field 1 is a BitMap then we are packing an
-            // ISO-8583 message so next field is fld#2.
-            // else we are packing an ANSI X9.2 message, first field is 1
-            int tmpMaxField = Math.min(m.getMaxField(), 128);
-
-            for (int i = first; i <= tmpMaxField; i++) {
-                if ((c = (ISOComponent) fields.get(i)) != null) {
-                    try {
-                        ISOFieldPackager fp = fld[i];
-                        if (fp == null)
-                            throw new ISOException("null field " + i + " packager");
-                        b = fp.pack(c);
-                        len += b.length;
-                        v.add(b);
-                    } catch (ISOException e) {
-                        e.printStackTrace();
-                        throw new ISOException("error packing field " + i, e);
-                    }
-                }
-            }
-
-            if (m.getMaxField() > 128 && fld.length > 128) {
-                for (int i = 1; i <= 64; i++) {
-                    if ((c = (ISOComponent) fields.get(i + 128)) != null) {
-                        try {
-                            b = fld[i + 128].pack(c);
-                            len += b.length;
-                            v.add(b);
-                        } catch (ISOException e) {
-                            throw e;
-                        }
-                    }
-                }
-            }
-
-            int k = 0;
-            byte[] d = new byte[len];
-
-            // if ISOMsg insert header
-            if (m instanceof ISOMsg && headerLength > 0) {
-                byte[] h = ((ISOMsg) m).getHeader();
-                if (h != null) {
-                    System.arraycopy(h, 0, d, k, h.length);
-                    k += h.length;
-                }
-            }
-            for (byte[] bb : v) {
-                System.arraycopy(bb, 0, d, k, bb.length);
-                k += bb.length;
-            }
-            return d;
-        } catch (ISOException e) {
-            throw e;
-        } finally {
+        if (m instanceof ISOMsg && headerLength > 0) {
+            byte[] h = ((ISOMsg) m).getHeader();
+            if (h != null)
+                len += h.length;
         }
+
+        if (first > 0 && c != null) {
+            b = fld[0].pack(c);
+            len += b.length;
+            v.add(b);
+        }
+
+        if (emitBitMap()) {
+            // BITMAP (-1 in HashTable)
+            c = (ISOComponent) fields.get(-1);
+            b = getBitMapfieldPackager().pack(c);
+            len += b.length;
+            v.add(b);
+        }
+
+        // if Field 1 is a BitMap then we are packing an
+        // ISO-8583 message so next field is fld#2.
+        // else we are packing an ANSI X9.2 message, first field is 1
+        int tmpMaxField = Math.min(m.getMaxField(), 128);
+
+        for (int i = first; i <= tmpMaxField; i++) {
+            if ((c = (ISOComponent) fields.get(i)) != null) {
+                try {
+                    ISOFieldPackager fp = fld[i];
+                    if (fp == null)
+                        throw new ISOException("null field " + i + " packager");
+                    b = fp.pack(c);
+                    len += b.length;
+                    v.add(b);
+                } catch (ISOException e) {
+                    e.printStackTrace();
+                    throw new ISOException("error packing field " + i, e);
+                }
+            }
+        }
+
+        if (m.getMaxField() > 128 && fld.length > 128) {
+            for (int i = 1; i <= 64; i++) {
+                if ((c = (ISOComponent) fields.get(i + 128)) != null) {
+                    b = fld[i + 128].pack(c);
+                    len += b.length;
+                    v.add(b);
+                }
+            }
+        }
+
+        int k = 0;
+        byte[] d = new byte[len];
+
+        // if ISOMsg insert header
+        if (m instanceof ISOMsg && headerLength > 0) {
+            byte[] h = ((ISOMsg) m).getHeader();
+            if (h != null) {
+                System.arraycopy(h, 0, d, k, h.length);
+                k += h.length;
+            }
+        }
+        for (byte[] bb : v) {
+            System.arraycopy(bb, 0, d, k, bb.length);
+            k += bb.length;
+        }
+        return d;
     }
 
     @Override
@@ -148,7 +139,7 @@ public abstract class AS2805BasePackager implements ISOPackager {
                 throw new ISOException("Can't call packager on non Composite");
 
             // if ISOMsg and headerLength defined
-            if (m instanceof ISOMsg /* && ((ISOMsg) m).getHeader()==null */&& headerLength > 0) {
+            if (m instanceof ISOMsg /* && ((ISOMsg) m).getHeader()==null */ && headerLength > 0) {
                 byte[] h = new byte[headerLength];
                 System.arraycopy(b, 0, h, 0, headerLength);
                 ((ISOMsg) m).setHeader(h);
@@ -195,7 +186,6 @@ public abstract class AS2805BasePackager implements ISOPackager {
             throw e;
         } catch (Exception e) {
             throw new ISOException(e.getMessage() + " consumed=" + consumed);
-        } finally {
         }
     }
 
@@ -208,7 +198,10 @@ public abstract class AS2805BasePackager implements ISOPackager {
             // if ISOMsg and headerLength defined
             if (m instanceof ISOMsg && ((ISOMsg) m).getHeader() == null && headerLength > 0) {
                 byte[] h = new byte[headerLength];
-                in.read(h, 0, headerLength);
+                int count = in.read(h, 0, headerLength);
+                if (count != headerLength) {
+                    throw new ISOException("Invalid header");
+                }
                 ((ISOMsg) m).setHeader(h);
             }
 
@@ -250,13 +243,10 @@ public abstract class AS2805BasePackager implements ISOPackager {
                     }
                 }
             }
-        } catch (ISOException e) {
-            throw e;
-        } catch (EOFException e) {
+        } catch (ISOException | EOFException e) {
             throw e;
         } catch (Exception e) {
             throw new ISOException(e);
-        } finally {
         }
     }
 
@@ -276,10 +266,6 @@ public abstract class AS2805BasePackager implements ISOPackager {
     @Override
     public ISOMsg createISOMsg() {
         return new ISOMsg();
-    }
-
-    protected int getMaxValidField() {
-        return 128;
     }
 
     protected ISOFieldPackager getBitMapfieldPackager() {

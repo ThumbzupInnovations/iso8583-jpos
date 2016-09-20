@@ -19,12 +19,9 @@ package org.lostcoder.iso8583;
 
 import org.lostcoder.iso8583.exception.Iso8583Exception;
 
-/**
- * Created by Sean on 2016/09/15.
- */
 public class JposService implements Iso8583Service {
     @Override
-    public Iso8583Message create(String mti, AcquirerProtocol protocol) throws Iso8583Exception {
+    public Iso8583Message create(String mti, AcquirerProtocol protocol) {
         return new JposMessage(mti, protocol);
     }
 
