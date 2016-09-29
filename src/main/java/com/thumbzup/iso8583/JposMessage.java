@@ -15,14 +15,16 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.lostcoder.iso8583;
+package com.thumbzup.iso8583;
 
+import com.thumbzup.iso8583.exception.Iso8583Exception;
+import com.thumbzup.iso8583.packager.AS2805Packager;
+import com.thumbzup.iso8583.packager.BASE24Packager;
+import com.thumbzup.iso8583.packager.SimpleBasePackager;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOFieldPackager;
 import org.jpos.iso.ISOMsg;
-import org.jpos.iso.packager.BASE24Packager;
-import org.lostcoder.iso8583.exception.Iso8583Exception;
-import org.lostcoder.iso8583.packager.AS2805Packager;
+import org.jpos.iso.ISOPackager;
 
 class JposMessage extends ISOMsg implements Iso8583Message {
 
@@ -30,16 +32,18 @@ class JposMessage extends ISOMsg implements Iso8583Message {
 
     private boolean modified;
 
-    JposMessage(String messageType, AcquirerProtocol protocol) {
+    JposMessage(String messageType, byte[] header, AcquirerProtocol protocol) {
         super(messageType);
-        setPackager(protocol);
+        if (header != null) {
+            setHeader(header);
+            setPackager(protocol, header.length);
+        } else {
+            setPackager(protocol, 0);
+        }
     }
 
-    public JposMessage() {
-    }
-
-    JposMessage(byte[] isoData, AcquirerProtocol protocol) throws Iso8583Exception {
-        setPackager(protocol);
+    JposMessage(byte[] isoData, int headerLength, AcquirerProtocol protocol) throws Iso8583Exception {
+        setPackager(protocol, headerLength);
         try {
             unpack(isoData);
         } catch (ISOException e) {
@@ -48,15 +52,22 @@ class JposMessage extends ISOMsg implements Iso8583Message {
         modified = true;
     }
 
-    private void setPackager(AcquirerProtocol protocol) {
+    private void setPackager(AcquirerProtocol protocol, int headerLength) {
+        SimpleBasePackager p;
         switch (protocol) {
             case BASE24:
-                setPackager(new BASE24Packager());
+                p = new BASE24Packager();
                 break;
             case AS2805:
-                setPackager(new AS2805Packager());
+                p = new AS2805Packager();
                 break;
+            default:
+                throw new IllegalArgumentException("Protocol not supported : " + protocol);
         }
+        if (headerLength > 0) {
+            p.setHeaderLength(headerLength);
+        }
+        setPackager(p);
     }
 
     @Override
@@ -122,8 +133,8 @@ class JposMessage extends ISOMsg implements Iso8583Message {
 
     @Override
     public byte[] getFieldValueAsEncoded(int no) throws Iso8583Exception {
-        AS2805Packager as2805Packager = (AS2805Packager) getPackager();
-        ISOFieldPackager fieldPackager = as2805Packager.getFieldPackager(no);
+        ISOPackager isoPackager = getPackager();
+        ISOFieldPackager fieldPackager = ((SimpleBasePackager) isoPackager).getFieldPackager(no);
         try {
             return fieldPackager.pack(getComponent(no));
         } catch (ISOException e) {

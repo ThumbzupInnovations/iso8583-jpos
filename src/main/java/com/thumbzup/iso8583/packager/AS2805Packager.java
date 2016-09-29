@@ -15,15 +15,15 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.lostcoder.iso8583.packager;
+package com.thumbzup.iso8583.packager;
 
+import com.thumbzup.iso8583.FieldConstants;
 import org.jpos.iso.*;
-import org.lostcoder.iso8583.FieldConstants;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AS2805Packager extends AS2805BasePackager {
+public class AS2805Packager extends SimpleBasePackager {
 
     private final static Map<Integer, ISOFieldPackager> fieldMap = new HashMap<>();
     private final static ISOFieldPackager[] fields = new ISOFieldPackager[128 + 1];

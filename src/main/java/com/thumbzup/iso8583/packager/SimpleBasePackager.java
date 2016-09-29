@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.lostcoder.iso8583.packager;
+package com.thumbzup.iso8583.packager;
 
 import org.jpos.iso.*;
 
@@ -27,7 +27,7 @@ import java.util.BitSet;
 import java.util.Map;
 
 @SuppressWarnings("unused")
-public abstract class AS2805BasePackager implements ISOPackager {
+public abstract class SimpleBasePackager implements ISOPackager {
     protected ISOFieldPackager[] fld;
 
     protected String realm = null;

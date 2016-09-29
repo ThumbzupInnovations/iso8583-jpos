@@ -15,29 +15,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.lostcoder.iso8583;
+package com.thumbzup.iso8583;
 
-import org.lostcoder.iso8583.exception.Iso8583Exception;
+import com.thumbzup.iso8583.exception.Iso8583Exception;
 
 public class JposService implements Iso8583Service {
     @Override
-    public Iso8583Message create(String mti, AcquirerProtocol protocol) {
-        return new JposMessage(mti, protocol);
+    public Iso8583Message create(String mti, byte[] header, AcquirerProtocol protocol) {
+        return new JposMessage(mti, header, protocol);
     }
 
     @Override
-    public Iso8583Message create(byte[] isodata, AcquirerProtocol protocol) throws Iso8583Exception {
-        return new JposMessage(isodata, protocol);
+    public Iso8583Message parse(byte[] isodata, int headerLength, AcquirerProtocol protocol) throws Iso8583Exception {
+        return new JposMessage(isodata, headerLength, protocol);
     }
 
     @Override
     public boolean supports(AcquirerProtocol protocol) {
         switch (protocol) {
             case BASE24:
-                return true;
             case AS2805:
                 return true;
+            default:
+                return false;
         }
-        return false;
     }
 }
