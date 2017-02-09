@@ -35,6 +35,7 @@ public class JposService implements Iso8583Service {
         switch (protocol) {
             case BASE24:
             case AS2805:
+            case POSTBRIDGE:
                 return true;
             default:
                 return false;

@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 @SuppressWarnings("unused")
 public abstract class SimpleBasePackager implements ISOPackager {
@@ -176,6 +177,7 @@ public abstract class SimpleBasePackager implements ISOPackager {
                         m.set(c);
                     }
                 } catch (ISOException e) {
+                    m.dump(System.out,"");
                     e = new ISOException(String.format("%s (%s) unpacking field=%d, consumed=%d", e.getMessage(), e
                             .getNested().toString(), i, consumed));
                     throw e;
@@ -257,6 +259,12 @@ public abstract class SimpleBasePackager implements ISOPackager {
 
     public ISOFieldPackager getFieldPackager(int fldNumber) {
         return fld != null && fldNumber < fld.length ? fld[fldNumber] : null;
+    }
+
+    public ISOFieldPackager getFieldPackager(String path) {
+        StringTokenizer st = new StringTokenizer(path, ".");
+        int fldno = Integer.parseInt(st.nextToken());
+        return fld != null && fldno < fld.length ? fld[fldno] : null;
     }
 
     public void setFieldPackager(int fldNumber, ISOFieldPackager fieldPackager) {
