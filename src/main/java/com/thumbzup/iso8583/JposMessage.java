@@ -143,6 +143,24 @@ class JposMessage extends ISOMsg implements Iso8583Message {
     }
 
     @Override
+    public boolean isRequestMessage() throws Iso8583Exception {
+        try {
+            return isRequest();
+        } catch (ISOException e) {
+            throw new Iso8583Exception(e);
+        }
+    }
+
+    @Override
+    public boolean isResponseMessage() throws Iso8583Exception {
+        try {
+            return isResponse();
+        } catch (ISOException e) {
+            throw new Iso8583Exception(e);
+        }
+    }
+
+    @Override
     public Object getFieldValue(int no) throws Iso8583Exception {
         try {
             return getValue(no);
