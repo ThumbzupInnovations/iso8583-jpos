@@ -22,10 +22,7 @@ import com.thumbzup.iso8583.packager.AS2805Packager;
 import com.thumbzup.iso8583.packager.BASE24Packager;
 import com.thumbzup.iso8583.packager.PostBridgePackager;
 import com.thumbzup.iso8583.packager.SimpleBasePackager;
-import org.jpos.iso.ISOException;
-import org.jpos.iso.ISOFieldPackager;
-import org.jpos.iso.ISOMsg;
-import org.jpos.iso.ISOPackager;
+import org.jpos.iso.*;
 
 import java.util.StringTokenizer;
 
@@ -53,6 +50,11 @@ class JposMessage extends ISOMsg implements Iso8583Message {
             throw new Iso8583Exception(e);
         }
         modified = true;
+    }
+
+    public JposMessage(ISOMsg value, ISOPackager packager) {
+        setPackager(packager);
+        merge(value);
     }
 
     public boolean hasPathField(String path) throws Iso8583Exception {
@@ -163,7 +165,16 @@ class JposMessage extends ISOMsg implements Iso8583Message {
     @Override
     public Object getFieldValue(int no) throws Iso8583Exception {
         try {
-            return getValue(no);
+            Object value = getValue(no);
+            if (value instanceof ISOMsg) {
+                ISOMsg value1 = (ISOMsg) value;
+                ISOFieldPackager fieldPackager = ((SimpleBasePackager) packager).getFieldPackager(no);
+                if (fieldPackager instanceof ISOMsgFieldPackager) {
+                    ISOMsgFieldPackager isoFieldPackager = (ISOMsgFieldPackager) fieldPackager;
+                    return new JposMessage(value1, isoFieldPackager.getISOMsgPackager());
+                }
+            }
+            return value;
         } catch (ISOException e) {
             throw new Iso8583Exception(e);
         }
