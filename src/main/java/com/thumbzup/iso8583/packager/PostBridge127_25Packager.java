@@ -27,7 +27,7 @@ import java.util.Map;
 class PostBridge127_25Packager extends SimpleBasePackager {
 
     private final static Map<Integer, ISOFieldPackager> fieldMap127_25 = new HashMap<>();
-    private final static ISOFieldPackager fld127_25[] = new ISOFieldPackager[30 + 1];
+    private final static ISOFieldPackager fld127_25[] = new ISOFieldPackager[33 + 1];
 
     static {
     	fieldMap127_25.put(FieldConstants.FIELD_0, new IF_CHAR(0, "PLACEHOLDER"));
@@ -61,6 +61,9 @@ class PostBridge127_25Packager extends SimpleBasePackager {
     	fieldMap127_25.put(FieldConstants.FIELD_28, new IFA_LCHAR(8, "TRANSACTION SEQUENCE COUNTER"));
     	fieldMap127_25.put(FieldConstants.FIELD_29, new IFA_NUMERIC(2, "TRANSACTION TYPE"));
     	fieldMap127_25.put(FieldConstants.FIELD_30, new IF_CHAR(8, "UNPREDICTABLE NUMBER"));
+    	fieldMap127_25.put(FieldConstants.FIELD_31, new IFA_LLCHAR(32, "ISSUER AUTHENTICATIN DATA"));
+    	fieldMap127_25.put(FieldConstants.FIELD_32, new IFA_LLLLCHAR(3354, "ISSUER SCRIPT TEMPLATE 1"));
+    	fieldMap127_25.put(FieldConstants.FIELD_33, new IFA_LLLLCHAR(3354, "ISSUER SCRIPT TEMPLATE 2"));
 
     	for (int i = 0; i <= fld127_25.length; i++) {
             if (fieldMap127_25.containsKey(i)) {

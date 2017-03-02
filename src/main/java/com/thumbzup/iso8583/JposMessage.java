@@ -26,6 +26,8 @@ import org.jpos.iso.*;
 
 import java.util.StringTokenizer;
 
+import javax.xml.bind.DatatypeConverter;
+
 class JposMessage extends ISOMsg implements Iso8583Message {
 
     private byte[] packCache = null;
@@ -275,4 +277,5 @@ class JposMessage extends ISOMsg implements Iso8583Message {
             throw new Iso8583Exception(e);
         }
     }
+
 }
