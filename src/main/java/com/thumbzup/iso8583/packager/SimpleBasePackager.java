@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 @SuppressWarnings("unused")
-public abstract class SimpleBasePackager implements ISOPackager {
+public abstract class SimpleBasePackager implements ImprovedIsoPackager {
     protected ISOFieldPackager[] fld;
 
     protected String realm = null;
