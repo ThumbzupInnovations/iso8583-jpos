@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import javax.xml.bind.DatatypeConverter;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+
 import static com.thumbzup.iso8583.FieldConstants.*;
 
 /**
@@ -87,8 +90,8 @@ public class MessageFactoryTest {
 
         ModuleNameDataList nameDataList = new ModuleNameDataList(msg.getFieldValueAsBytes("170.0"));
 
-        Assert.assertEquals("TradeRootDevelopment.Testing.Test.CEHSlaves",nameDataList.get(0));
-        Assert.assertEquals("TradeRootDevelopment.Testing.Test.BicIso",nameDataList.get(1));
+        Assert.assertEquals("TradeRootDevelopment.Testing.Test.CEHSlaves", nameDataList.get(0));
+        Assert.assertEquals("TradeRootDevelopment.Testing.Test.BicIso", nameDataList.get(1));
         Assert.assertEquals(lexicalXSDHexBinary, DatatypeConverter.printHexBinary(msg.encode()));
     }
 
@@ -299,7 +302,6 @@ public class MessageFactoryTest {
         Assert.assertEquals("00123456789", msg.getFieldValueAsString(FIELD_32));
         Assert.assertEquals("58889290801975385===88390020000000002", msg.getFieldValueAsString(FIELD_35));
         Assert.assertEquals("121004120607", msg.getFieldValueAsString(FIELD_37));
-
 
 
         Assert.assertEquals("390", msg.getFieldValueAsString(FIELD_40));
@@ -532,26 +534,18 @@ public class MessageFactoryTest {
         Assert.assertEquals(lexicalXSDHexBinary, DatatypeConverter.printHexBinary(msg.encode()));
     }
 
-    //The documentation for this test seems to be incorrect Hence all the commented out code
     @Test
     public void testReversalResponse0430() throws Exception {
         String lexicalXSDHexBinary = "30343330B22044012AC0800000000040100000023030323030303030303030303031323435393130303930383336323531303933313134353232393031313135323630303331303030333337343739303537313030343635333633363D3134313231323630303030303030303835303030503435696844313039333131303036303436383739393130303030303030303030393939353531363032303030303030303031303033313235303032303030303030303030303030303030303030303030303131353236303133313030303370C0060000400000303130323030313030303135303030303063313032643939342D323434372D333835352D383230652D38373936643739646137313830303136303030380004000000000000303033083030323136009200335472616465726F6F7451412E50534F2E496E746572636F6E6E6563742E42616E6B526F7574657242616E6B57696E64686F656B00215472616465726F6F7451412E50534F2E5365637572652E4361726453776974636800385472616465726F6F7451412E50534F2E496E746572636F6E6E6563742E42616E6B526F7574657246697273744E6174696F6E616C42616E6B0040000601A91E903030000602A91E903030000601A91E903031000602A91E903031000601A91EA03032000602A91EA03032000601A91F8A3032000602A91F9A30323037";
         Iso8583Message msg = Iso8583MessageFactory.parse(DatatypeConverter.parseHexBinary(lexicalXSDHexBinary), AcquirerProtocol.TRADEROUTE, 0);
-        System.out.println(print(msg));
+
         Assert.assertEquals("0430", msg.getMessageType());
         Assert.assertEquals("002000", msg.getFieldValueAsString(FIELD_3));
         Assert.assertEquals("000000012459", msg.getFieldValueAsString(FIELD_4));
         Assert.assertEquals("1009083625", msg.getFieldValueAsString(FIELD_7));
         Assert.assertEquals("109311", msg.getFieldValueAsString(FIELD_11));
-//        Assert.assertEquals("125002", msg.getFieldValueAsString(FIELD_12));
-//        Assert.assertEquals("1003", msg.getFieldValueAsString(FIELD_13));
-//        Assert.assertEquals("1009", msg.getFieldValueAsString(FIELD_17));
         Assert.assertEquals("4522", msg.getFieldValueAsString(FIELD_18));
         Assert.assertEquals("901", msg.getFieldValueAsString(FIELD_22));
-//        Assert.assertEquals("00", msg.getFieldValueAsString(FIELD_25));
-
-//        Assert.assertEquals("C00000000", msg.getFieldValueAsString(FIELD_28));
-//        Assert.assertEquals("C00000000", msg.getFieldValueAsString(FIELD_30));
 
         Assert.assertEquals("52600310003", msg.getFieldValueAsString(FIELD_32));
         Assert.assertEquals("4790571004653636=14121260000000085000", msg.getFieldValueAsString(FIELD_35));
@@ -561,15 +555,10 @@ public class MessageFactoryTest {
 
         Assert.assertEquals("60468799", msg.getFieldValueAsString(FIELD_41));
         Assert.assertEquals("100000000009995", msg.getFieldValueAsString(FIELD_42));
-//        Assert.assertEquals("Test Merchant 1        Windhoek       NA", msg.getFieldValueAsString(FIELD_43));
         Assert.assertEquals("516", msg.getFieldValueAsString(FIELD_49));
 
-//        Assert.assertEquals("2053516C000000000000", msg.getFieldValueAsString(FIELD_54));
-
-//        Assert.assertEquals("4021", msg.getFieldValueAsString(FIELD_56));
 
         Assert.assertEquals("020000000010031250020000000000000000000000", msg.getFieldValueAsString(FIELD_90));
-//        Assert.assertEquals("000000000000000000000000C00000000C00000000", msg.getFieldValueAsString(FIELD_95));
 
         Assert.assertEquals("52601310003", msg.getFieldValueAsString(FIELD_100));
 
@@ -597,14 +586,99 @@ public class MessageFactoryTest {
         Assert.assertEquals("000000", msg.getFieldValueAsString("150.14"));
         Assert.assertEquals("00", msg.getFieldValueAsString("151.5"));
 
-//        Assert.assertEquals("235TermApp.ISO:ReconciliationIndicator13109218Postilion:MetaData241235TermApp.ISO:ReconciliationIndicator111", msg.getFieldValueAsString("161"));
 
         Assert.assertEquals("07", msg.getFieldValueAsString("170.2"));
         Assert.assertEquals(lexicalXSDHexBinary, DatatypeConverter.printHexBinary(msg.encode()));
     }
 
+    @Test
+    public void testEmvAuth0100() throws Exception {
+       // String lexicalXSDHexBinary = "30313030F23C468129C080000000000000000002313635343133333330303839303230303131303033303030303030303030303032303030313031373039313631383537333039373131313631383130313732353132373239393035313030333030313130303132333435363738393333353431333333303038393032303031313D32353132363031303739333630383035313831303137313131363136363031303030303030363631303030303030303030313230303535313672C10400004000003031313230313230313331353533303131383635323638353438616533393364612D646262312D343039332D613033332D63326366306361636562613330303334323631363534313333333030303030303030313130313435FC3FBED8803030303030303030323030303030303030303030303030303037A000000004101030000027FF00B571D7F230CEE3178030313800000000000000004201410342031E031F00410302303331343138343600F870A4980031380210A00000000000000000000000000000FF30303032E0F8E8373130323200000080003531363138313031373030946E2D49E800313233005D0037496E6E6572766174696F6E5053507561742E53746F72654D65726368616E742E4A61636F544553542E4A61636F42574D65726368616E740022496E6E6572766174696F6E5053507561742E5053502E546573744D41502E4D41503200180006024FF71130300006014FF73230310006024FF75130313032";//000000034FF711";
+        String lexicalXSDHexBinary = "30313030F23C468129C080000000000000000002313635343133333330303839303230303131303033303030303030303030303032303030313031373039313631383537333039373131313631383130313732353132373239393035313030333030313130303132333435363738393333353431333333303038393032303031313D32353132363031303739333630383035313831303137313131363136363031303030303030363631303030303030303030313230303535313672C10400004000003031313230313230313331353533303131383635323638353438616533393364612D646262312D343039332D613033332D63326366306361636562613330303334323631363534313333333030303030303030313130313435FC3FBED8803030303030303030323030303030303030303030303030303037A000000004101030000027FF00B571D7F230CEE3178030313800000000000000004201410342031E031F00410302303331343138343600F870A4980031380210A00000000000000000000000000000FF30303032E0F8E8373130323200000080003531363138313031373030946E2D49E800313330005D0037496E6E6572766174696F6E5053507561742E53746F72654D65726368616E742E4A61636F544553542E4A61636F42574D65726368616E740022496E6E6572766174696F6E5053507561742E5053502E546573744D41502E4D41503200180006024FF71130300006014FF73230310006024FF75130313032000000034FF711";
+        Iso8583Message msg = Iso8583MessageFactory.parse(DatatypeConverter.parseHexBinary(lexicalXSDHexBinary), AcquirerProtocol.TRADEROUTE, 0);
+        System.out.println(print(msg));
+        Assert.assertEquals("0100", msg.getMessageType());
+        Assert.assertEquals("5413330089020011", msg.getFieldValueAsString(FIELD_2));
+        Assert.assertEquals("003000", msg.getFieldValueAsString(FIELD_3));
+        Assert.assertEquals("000000002000", msg.getFieldValueAsString(FIELD_4));
+        Assert.assertEquals("1017091618", msg.getFieldValueAsString(FIELD_7));
+        Assert.assertEquals("573097", msg.getFieldValueAsString(FIELD_11));
+        Assert.assertEquals("111618", msg.getFieldValueAsString(FIELD_12));
+        Assert.assertEquals("1017", msg.getFieldValueAsString(FIELD_13));
+        Assert.assertEquals("2512", msg.getFieldValueAsString(FIELD_14));
 
-    public String print(Iso8583Message isoMessage) {
+        Assert.assertEquals("7299", msg.getFieldValueAsString(FIELD_18));
+        Assert.assertEquals("051", msg.getFieldValueAsString(FIELD_22));
+
+        Assert.assertEquals("003", msg.getFieldValueAsString(FIELD_23));
+        Assert.assertEquals("00", msg.getFieldValueAsString(FIELD_25));
+
+        Assert.assertEquals("00123456789", msg.getFieldValueAsString(FIELD_32));
+        Assert.assertEquals("5413330089020011=2512601079360805", msg.getFieldValueAsString(FIELD_35));
+        Assert.assertEquals("181017111616", msg.getFieldValueAsString(FIELD_37));
+
+        Assert.assertEquals("601", msg.getFieldValueAsString(FIELD_40));
+        Assert.assertEquals("00000066", msg.getFieldValueAsString(FIELD_41));
+        Assert.assertEquals("100000000012005", msg.getFieldValueAsString(FIELD_42));
+        Assert.assertEquals("516", msg.getFieldValueAsString(FIELD_49));
+
+
+        Assert.assertEquals("01", msg.getFieldValueAsString("130.0"));
+        Assert.assertEquals("1", msg.getFieldValueAsString("130.1"));
+        Assert.assertEquals("2", msg.getFieldValueAsString("130.2"));
+        Assert.assertEquals("0", msg.getFieldValueAsString("130.3"));
+        Assert.assertEquals("12", msg.getFieldValueAsString("130.4"));
+        Assert.assertEquals("0", msg.getFieldValueAsString("130.5"));
+        Assert.assertEquals("1", msg.getFieldValueAsString("130.6"));
+        Assert.assertEquals("3", msg.getFieldValueAsString("130.7"));
+
+        Assert.assertEquals("1", msg.getFieldValueAsString("131.0"));
+        Assert.assertEquals("5", msg.getFieldValueAsString("131.1"));
+        Assert.assertEquals("5", msg.getFieldValueAsString("131.2"));
+        Assert.assertEquals("3", msg.getFieldValueAsString("131.3"));
+
+        Assert.assertEquals("0", msg.getFieldValueAsString("132.0"));
+        Assert.assertEquals("1", msg.getFieldValueAsString("132.1"));
+        Assert.assertEquals("1", msg.getFieldValueAsString("132.2"));
+
+        Assert.assertEquals("86526854", msg.getFieldValueAsString("135"));
+        Assert.assertEquals("8ae393da-dbb1-4093-a033-c2cf0caceba3", msg.getFieldValueAsString("137"));
+        Assert.assertEquals("426", msg.getFieldValueAsString("138"));
+
+        Assert.assertEquals("5413330000000011", msg.getFieldValueAsString("144"));
+
+        Assert.assertEquals("000000002000", msg.getFieldValueAsString("150.1"));
+        Assert.assertEquals("000000000000", msg.getFieldValueAsString("150.2"));
+        Assert.assertEquals("A0000000041010", msg.getFieldValueAsString("150.3"));
+        Assert.assertEquals("3000", msg.getFieldValueAsString("150.4"));
+        Assert.assertEquals("0027", msg.getFieldValueAsString("150.5"));
+        Assert.assertEquals("FF00", msg.getFieldValueAsString("150.6"));
+        Assert.assertEquals("B571D7F230CEE317", msg.getFieldValueAsString("150.11"));
+        Assert.assertEquals("80", msg.getFieldValueAsString("150.12"));
+        Assert.assertEquals("00000000000000004201410342031E031F00", msg.getFieldValueAsString("150.13"));
+        Assert.assertEquals("410302", msg.getFieldValueAsString("150.14"));
+        Assert.assertEquals("03141846", msg.getFieldValueAsString("150.15"));
+        Assert.assertEquals("00F870A49800", msg.getFieldValueAsString("150.16"));
+        Assert.assertEquals("0210A00000000000000000000000000000FF", msg.getFieldValueAsString("150.17"));
+        Assert.assertEquals("0002", msg.getFieldValueAsString("150.19"));
+        Assert.assertEquals("E0F8E8", msg.getFieldValueAsString("150.20"));
+        Assert.assertEquals("710", msg.getFieldValueAsString("150.21"));
+        Assert.assertEquals("22", msg.getFieldValueAsString("150.22"));
+        Assert.assertEquals("0000008000", msg.getFieldValueAsString("150.23"));
+        Assert.assertEquals("516", msg.getFieldValueAsString("150.25"));
+        Assert.assertEquals("181017", msg.getFieldValueAsString("150.26"));
+        Assert.assertEquals("00", msg.getFieldValueAsString("150.28"));
+        Assert.assertEquals("946E2D49", msg.getFieldValueAsString("150.29"));
+        Assert.assertEquals("E800", msg.getFieldValueAsString("150.33"));
+
+
+//        Assert.assertEquals("02", msg.getFieldValueAsString("170.2"));
+//        Assert.assertEquals("5240593", msg.getFieldValueAsString("170.3"));
+        Assert.assertEquals(lexicalXSDHexBinary, DatatypeConverter.printHexBinary(msg.encode()));
+    }
+
+
+    public static String print(Iso8583Message isoMessage) {
         StringBuilder builder = new StringBuilder();
         try {
             builder.append("---- ISO MESSAGE -----\n");
@@ -619,7 +693,7 @@ public class MessageFactoryTest {
         return builder.toString();
     }
 
-    private void appendFields(StringBuilder builder, Iso8583Message msg) throws Iso8583Exception {
+    private static void appendFields(StringBuilder builder, Iso8583Message msg) throws Iso8583Exception {
         for (int i = 0; i <= msg.getMaxField(); i++) {
             if (msg.hasField(i)) {
                 Object fieldValue = msg.getFieldValue(i);
@@ -665,5 +739,25 @@ public class MessageFactoryTest {
 
             }
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        String s = "0100 0xF2 <F 0x81 ) 0xC0  0x80  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x02 1654133300890200110030000000000020001017091618573097111618101725127299051003001100123456789335413330089020011=251260107936080518101711161660100000066100000000012005516r 0xC1  0x04  0x00  0x00 @ 0x00  0x00 01120120131553011865268548ae393da-dbb1-4093-a033-c2cf0caceba30034261654133300000000110145 0xFC ? 0xBE  0xD8  0x80 00000000200000000000000007 0xA0  0x00  0x00  0x00  0x04  0x10  0x10 0 0x00  0x00 ' 0xFF  0x00  0xB5 q 0xD7  0xF2 0 0xCE  0xE3  0x17  0x80 018 0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x00 B 0x01 A 0x03 B 0x03  0x1E  0x03  0x1F  0x00 A 0x03  0x02 03141846 0x00  0xF8 p 0xA4  0x98  0x00 18 0x02  0x10  0xA0  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0x00  0xFF 0002 0xE0  0xF8  0xE8 71022 0x00  0x00  0x00  0x80  0x00 51618101700 0x94 n-I 0xE8  0x00 130 0x00 ] 0x00 7InnervationPSPuat.StoreMerchant.JacoTEST.JacoBWMerchant 0x00 \"InnervationPSPuat.PSP.TestMAP.MAP2 0x00  0x18  0x00  0x06  0x02 O 0xF7  0x11 00 0x00  0x06  0x01 O 0xF7 201 0x00  0x06  0x02 O 0xF7 Q0102 0x00  0x00  0x00  0x03 O 0xF7  0x11 ";
+        char[] a = s.toCharArray();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == ' ' && a[i+1] == '0' && a[i + 2] == 'x' && a[i + 5] == ' ') {
+                baos.write(DatatypeConverter.parseHexBinary(new String(Arrays.copyOfRange(a, i + 3, i + 5))));
+                i+=5;
+            } else {
+                baos.write(a[i]);
+            }
+        }
+        byte[] val = baos.toByteArray();
+        System.out.println(new String(val));
+        System.out.println(DatatypeConverter.printHexBinary(val));
+        String lexicalXSDHexBinary = "30313030F23C468129C080000000000000000002313635343133333330303839303230303131303033303030303030303030303032303030313031373039313631383537333039373131313631383130313732353132373239393035313030333030313130303132333435363738393333353431333333303038393032303031313D32353132363031303739333630383035313831303137313131363136363031303030303030363631303030303030303030313230303535313672C10400004000003031313230313230313331353533303131383635323638353438616533393364612D646262312D343039332D613033332D63326366306361636562613330303334323631363534313333333030303030303030313130313435FC3FBED8803030303030303030323030303030303030303030303030303037A000000004101030000027FF00B571D7F230CEE3178030313800000000000000004201410342031E031F00410302303331343138343600F870A4980031380210A00000000000000000000000000000FF30303032E0F8E8373130323200000080003531363138313031373030946E2D49E800313330005D0037496E6E6572766174696F6E5053507561742E53746F72654D65726368616E742E4A61636F544553542E4A61636F42574D65726368616E740022496E6E6572766174696F6E5053507561742E5053502E546573744D41502E4D41503200180006024FF71130300006014FF73230310006024FF75130313032000000034FF711";
+        Iso8583Message msg = Iso8583MessageFactory.parse(DatatypeConverter.parseHexBinary(lexicalXSDHexBinary), AcquirerProtocol.TRADEROUTE, 0);
+        System.out.println(print(msg));
     }
 }
