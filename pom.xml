@@ -49,6 +49,12 @@
             <groupId>org.jpos</groupId>
             <artifactId>jpos</artifactId>
             <version>2.1.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sleepycat</groupId>
+                    <artifactId>je</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
