@@ -190,7 +190,7 @@ class JposMessage extends ISOMsg implements Iso8583Message {
     @Override
     public byte[] getFieldValueAsEncoded(int no) throws Iso8583Exception {
         ISOPackager isoPackager = getPackager();
-        ISOFieldPackager fieldPackager = ((SimpleBasePackager) isoPackager).getFieldPackager(no);
+        ISOFieldPackager fieldPackager = ((ImprovedIsoPackager) isoPackager).getFieldPackager(no);
         try {
             return fieldPackager.pack(getComponent(no));
         } catch (ISOException e) {

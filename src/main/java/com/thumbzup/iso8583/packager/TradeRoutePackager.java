@@ -40,15 +40,18 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_12, new IFA_NUMERIC(6, "Time, Local Transaction"));
         fieldMap.put(FieldConstants.FIELD_13, new IFA_NUMERIC(4, "Date, Local Transaction"));
         fieldMap.put(FieldConstants.FIELD_14, new IFA_NUMERIC(4, "Date, Expiration"));
+        fieldMap.put(FieldConstants.FIELD_15, new IFA_NUMERIC(4, "Date, Settlement"));
         fieldMap.put(FieldConstants.FIELD_17, new IFA_NUMERIC(4, "Date, Capture"));
         fieldMap.put(FieldConstants.FIELD_18, new IFA_NUMERIC(4, "Merchant Type"));
         fieldMap.put(FieldConstants.FIELD_22, new IFA_NUMERIC(3, "POS Entry Mode"));
+        fieldMap.put(FieldConstants.FIELD_23, new IFA_NUMERIC(3, "Card Sequence Number"));
         fieldMap.put(FieldConstants.FIELD_25, new IFA_NUMERIC(2, "POS Condition Code"));
         fieldMap.put(FieldConstants.FIELD_26, new IFA_NUMERIC(2, "POS PIN Capture Code"));
         fieldMap.put(FieldConstants.FIELD_27, new IFA_NUMERIC(1, "Authorization ID Response Length"));
         fieldMap.put(FieldConstants.FIELD_28, new IFA_AMOUNT(9, "Amount, Transaction Fee"));
         fieldMap.put(FieldConstants.FIELD_30, new IFA_AMOUNT(9, "Amount, Transaction Processing Fee"));
         fieldMap.put(FieldConstants.FIELD_32, new IFA_LLNUM(11, "Acquiring Institution Id Code"));
+        fieldMap.put(FieldConstants.FIELD_33, new IFA_LLNUM(11, "Forwarding Institution Id Code"));
         fieldMap.put(FieldConstants.FIELD_35, new IFA_LLNUM(37, "Track 2 Data"));
         fieldMap.put(FieldConstants.FIELD_37, new IF_CHAR(12, "Retrieval Reference Number"));
         fieldMap.put(FieldConstants.FIELD_38, new IF_CHAR(6, "Authorization ID Response"));
@@ -74,11 +77,13 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_135, new IFA_NUMERIC(8, "Session ID"));
         fieldMap.put(FieldConstants.FIELD_137, new IF_CHAR(36, "UUID"));
         fieldMap.put(FieldConstants.FIELD_138, new IFA_LLLCHAR(64, "Echo Data"));
+        fieldMap.put(FieldConstants.FIELD_139, new IFA_LLLCHAR(255, "Response Code Text"));
         fieldMap.put(FieldConstants.FIELD_144, new IFA_LLNUM(19, "Primary Account Number, Sanitised"));
         fieldMap.put(FieldConstants.FIELD_150, new ISOMsgFieldPackager(new IFA_LLLLBINARY(9999, "EMV Data"), new TradeRoute150Packager()));
         fieldMap.put(FieldConstants.FIELD_151, new ISOMsgFieldPackager(new IFA_LLLBINARY(999, "3D-Secure Data"), new TradeRoute151Packager()));
 //        fieldMap.put(FieldConstants.FIELD_150,  new IFA_LLLLBINARY(9999, "EMV Data"));
 //        fieldMap.put(FieldConstants.FIELD_151, new IFA_LLLBINARY(999, "3D-Secure Data"));
+        fieldMap.put(FieldConstants.FIELD_153, new ISOMsgFieldPackager(new IFA_LLLLLLCHAR(999999, "Additional Data Elements"), new TradeRoute153Packager()));
         fieldMap.put(FieldConstants.FIELD_161, new IFA_LLLLLCHAR(99999, "Structured Data"));
         fieldMap.put(FieldConstants.FIELD_170, new ISOMsgFieldPackager(new IFA_LLLBINARY(999, "Sub Message - Message Transit Data"), new TradeRoute170Packager()));
 
@@ -89,7 +94,7 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_9, new IFA_NUMERIC(8, "CONVERSION RATE, SETTLEMENT"));
         fieldMap.put(FieldConstants.FIELD_10, new IFA_NUMERIC(8, "CONVERSION RATE, CARDHOLDER BILLING"));
 
-        fieldMap.put(FieldConstants.FIELD_15, new IFA_NUMERIC(4, "DATE, SETTLEMENT"));
+
         fieldMap.put(FieldConstants.FIELD_16, new IFA_NUMERIC(4, "DATE, CONVERSION"));
 
 
@@ -97,7 +102,7 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_20, new IFA_NUMERIC(3, "PAN EXTENDED COUNTRY CODE"));
         fieldMap.put(FieldConstants.FIELD_21, new IFA_NUMERIC(3, "FORWARDING INSTITUTION COUNTRY CODE"));
 
-        fieldMap.put(FieldConstants.FIELD_23, new IFA_NUMERIC(3, "CARD SEQUENCE NUMBER"));
+
         fieldMap.put(FieldConstants.FIELD_24, new IFA_NUMERIC(3, "NETWORK INTERNATIONAL IDENTIFIEER"));
 
 
@@ -105,7 +110,7 @@ public class TradeRoutePackager extends ISOBasePackager {
 
         fieldMap.put(FieldConstants.FIELD_31, new IFA_AMOUNT(9, "AMOUNT, SETTLEMENT PROCESSING FEE"));
 
-        fieldMap.put(FieldConstants.FIELD_33, new IFA_LLNUM(11, "FORWARDING INSTITUTION IDENT CODE"));
+
         fieldMap.put(FieldConstants.FIELD_34, new IFA_LLCHAR(28, "PAN EXTENDED"));
 
         fieldMap.put(FieldConstants.FIELD_36, new IFA_LLLCHAR(104, "TRACK 3 DATA"));
@@ -202,7 +207,6 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_136, new IFA_LLLCHAR(999, "MAC 2"));
 
 
-        fieldMap.put(FieldConstants.FIELD_139, new IFA_LLLCHAR(999, "MAC 2"));
         fieldMap.put(FieldConstants.FIELD_140, new IFA_LLLCHAR(999, "MAC 2"));
         fieldMap.put(FieldConstants.FIELD_141, new IFA_LLLCHAR(999, "MAC 2"));
         fieldMap.put(FieldConstants.FIELD_142, new IFA_LLLCHAR(999, "MAC 2"));
@@ -215,7 +219,7 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_149, new IFA_LLLCHAR(999, "MAC 2"));
 
         fieldMap.put(FieldConstants.FIELD_152, new IFA_LLLCHAR(999, "MAC 2"));
-        fieldMap.put(FieldConstants.FIELD_153, new IFA_LLLCHAR(999, "MAC 2"));
+
         fieldMap.put(FieldConstants.FIELD_154, new IFA_LLLCHAR(999, "MAC 2"));
         fieldMap.put(FieldConstants.FIELD_155, new IFA_LLLCHAR(999, "MAC 2"));
         fieldMap.put(FieldConstants.FIELD_156, new IFA_LLLCHAR(999, "MAC 2"));
@@ -271,6 +275,95 @@ public class TradeRoutePackager extends ISOBasePackager {
             setThirdBitmapField(FieldConstants.FIELD_127);
         } catch (ISOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private static class TradeRoute153Packager extends SimpleBasePackager {
+        private final static Map<Integer, ISOFieldPackager> fieldMap153 = new HashMap<>();
+        private final static ISOFieldPackager fld153[] = new ISOFieldPackager[37];
+
+        protected boolean emitBitMap() {
+            return (fld[0] instanceof ISOBitMapPackager);
+        }
+
+        @Override
+        protected int getFirstField() {
+            return 0;
+        }
+
+        protected ISOFieldPackager getBitMapfieldPackager() {
+            return fld[0];
+        }
+
+        @Override
+        public int unpack(ISOComponent m, byte[] b) throws ISOException {
+            return super.unpack(m, b);
+        }
+
+
+        static {
+            fieldMap153.put(FieldConstants.FIELD_0, new IFB_BITMAP(8, "Additional Data Bit Map"));
+            fieldMap153.put(FieldConstants.FIELD_1, new IFA_LLLLLBINARY(99999, "Loyalty Invoices"));
+            fieldMap153.put(FieldConstants.FIELD_2, new IFA_LLBINARY(99, "Loyalty Card Data"));
+            fieldMap153.put(FieldConstants.FIELD_10, new IFA_LLLBINARY(999, "Operator Data"));
+            fieldMap153.put(FieldConstants.FIELD_11, new IFA_LLLBINARY(999, "Clearing Data"));
+            fieldMap153.put(FieldConstants.FIELD_12,  new ISOBinaryFieldPackager(65536, "Payment Tokens", LiteralBinaryInterpreter.INSTANCE, new BinaryPrefixer(2)) {
+                @Override
+                public int unpack(ISOComponent c, byte[] b, int offset) throws ISOException {
+                    if (offset == b.length) {
+                        return 0;
+                    }
+                    return super.unpack(c, b, offset);
+                }
+
+                @Override
+                public byte[] pack(ISOComponent c) throws ISOException {
+                    if (c.getValue() == null) {
+                        return new byte[0];
+                    }
+                    return super.pack(c);
+                }
+
+            });// Has short length 00034FF711 =>  0003 4FF711
+
+            fieldMap153.put(FieldConstants.FIELD_13, new IFA_LLLLBINARY(9999, "Utility Payment Tokens"));
+            fieldMap153.put(FieldConstants.FIELD_14, new IFA_LLLLBINARY(9999, "Service Station Data"));
+            fieldMap153.put(FieldConstants.FIELD_15, new IFA_LLLBINARY(999, "Private Label Data"));
+            fieldMap153.put(FieldConstants.FIELD_16, new IFA_LLCHAR(50, "Card Token"));
+            fieldMap153.put(FieldConstants.FIELD_17, new IF_CHAR(12, "Agent Service Fee"));
+            fieldMap153.put(FieldConstants.FIELD_18, new IFA_LLLBINARY(999, "Notification Information"));
+            fieldMap153.put(FieldConstants.FIELD_19,  new ISOBinaryFieldPackager(65536, "Messages", LiteralBinaryInterpreter.INSTANCE, new BinaryPrefixer(2)) {
+                @Override
+                public int unpack(ISOComponent c, byte[] b, int offset) throws ISOException {
+                    if (offset == b.length) {
+                        return 0;
+                    }
+                    return super.unpack(c, b, offset);
+                }
+
+                @Override
+                public byte[] pack(ISOComponent c) throws ISOException {
+                    if (c.getValue() == null) {
+                        return new byte[0];
+                    }
+                    return super.pack(c);
+                }
+
+            });// Has short length 00034FF711 =>  0003 4FF711
+
+            fieldMap153.put(FieldConstants.FIELD_20, new IFA_LLLBINARY(999, "Death Certificate Data"));
+            fieldMap153.put(FieldConstants.FIELD_63, new IFA_LLLBINARY(999, "Miscellaneous"));
+
+            for (int i = 0; i <= fld153.length; i++) {
+                if (fieldMap153.containsKey(i)) {
+                    fld153[i] = fieldMap153.get(i);
+                }
+            }
+        }
+
+        TradeRoute153Packager() {
+            super();
+            setFieldPackager(fld153);
         }
     }
 
@@ -332,7 +425,7 @@ public class TradeRoutePackager extends ISOBasePackager {
             fieldMap150.put(FieldConstants.FIELD_31, new IFA_LLLLBINARY(1677, "Issuer Script Template 1"));
             fieldMap150.put(FieldConstants.FIELD_32, new IFA_LLLLBINARY(1677, "Issuer Script Template 2"));
             fieldMap150.put(FieldConstants.FIELD_33, new IFB_BINARY(2, "Transaction Status Information"));
-            fieldMap150.put(FieldConstants.FIELD_34, new IFB_LLCHAR(16, "Application Label"));
+            fieldMap150.put(FieldConstants.FIELD_34, new IFA_LLCHAR(16, "Application Label"));
             fieldMap150.put(FieldConstants.FIELD_35, new IFA_NUMERIC(1, "Auth Adv"));
             fieldMap150.put(FieldConstants.FIELD_36, new IFA_NUMERIC(2, "Contactless Device Profile"));
 
