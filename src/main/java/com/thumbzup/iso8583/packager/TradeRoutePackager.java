@@ -86,6 +86,8 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_153, new ISOMsgFieldPackager(new IFA_LLLLLLCHAR(999999, "Additional Data Elements"), new TradeRoute153Packager()));
         fieldMap.put(FieldConstants.FIELD_161, new IFA_LLLLLCHAR(99999, "Structured Data"));
         fieldMap.put(FieldConstants.FIELD_170, new ISOMsgFieldPackager(new IFA_LLLBINARY(999, "Sub Message - Message Transit Data"), new TradeRoute170Packager()));
+        fieldMap.put(FieldConstants.FIELD_172, new ISOMsgFieldPackager(new IF_LENGTH_BINARY(4, "Sub Message - Replacement Elements Extended"), new TradeRoute172Packager()));
+
 
 
         fieldMap.put(FieldConstants.FIELD_5, new IFA_NUMERIC(12, "AMOUNT, SETTLEMENT"));
@@ -93,41 +95,23 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_8, new IFA_NUMERIC(8, "AMOUNT, CARDHOLDER BILLING FEE"));
         fieldMap.put(FieldConstants.FIELD_9, new IFA_NUMERIC(8, "CONVERSION RATE, SETTLEMENT"));
         fieldMap.put(FieldConstants.FIELD_10, new IFA_NUMERIC(8, "CONVERSION RATE, CARDHOLDER BILLING"));
-
-
         fieldMap.put(FieldConstants.FIELD_16, new IFA_NUMERIC(4, "DATE, CONVERSION"));
-
-
         fieldMap.put(FieldConstants.FIELD_19, new IFA_NUMERIC(3, "ACQUIRING INSTITUTION COUNTRY CODE"));
         fieldMap.put(FieldConstants.FIELD_20, new IFA_NUMERIC(3, "PAN EXTENDED COUNTRY CODE"));
         fieldMap.put(FieldConstants.FIELD_21, new IFA_NUMERIC(3, "FORWARDING INSTITUTION COUNTRY CODE"));
-
-
         fieldMap.put(FieldConstants.FIELD_24, new IFA_NUMERIC(3, "NETWORK INTERNATIONAL IDENTIFIEER"));
-
-
         fieldMap.put(FieldConstants.FIELD_29, new IFA_AMOUNT(9, "AMOUNT, SETTLEMENT FEE"));
-
         fieldMap.put(FieldConstants.FIELD_31, new IFA_AMOUNT(9, "AMOUNT, SETTLEMENT PROCESSING FEE"));
-
-
         fieldMap.put(FieldConstants.FIELD_34, new IFA_LLCHAR(28, "PAN EXTENDED"));
-
         fieldMap.put(FieldConstants.FIELD_36, new IFA_LLLCHAR(104, "TRACK 3 DATA"));
-
-
         fieldMap.put(FieldConstants.FIELD_44, new IFA_LLCHAR(25, "ADITIONAL RESPONSE DATA"));
         fieldMap.put(FieldConstants.FIELD_45, new IFA_LLCHAR(76, "TRACK 1 DATA"));
         fieldMap.put(FieldConstants.FIELD_46, new IFA_LLLCHAR(999, "ADITIONAL DATA - ISO"));
         fieldMap.put(FieldConstants.FIELD_47, new IFA_LLLCHAR(999, "ADITIONAL DATA - NATIONAL"));
         fieldMap.put(FieldConstants.FIELD_48, new IFA_LLLCHAR(999, "ADITIONAL DATA - PRIVATE"));
-
         fieldMap.put(FieldConstants.FIELD_50, new IF_CHAR(3, "CURRENCY CODE, SETTLEMENT"));
         fieldMap.put(FieldConstants.FIELD_51, new IF_CHAR(3, "CURRENCY CODE, CARDHOLDER BILLING"));
-
-
         fieldMap.put(FieldConstants.FIELD_55, new IFA_LLLCHAR(999, "RESERVED ISO"));
-
         fieldMap.put(FieldConstants.FIELD_57, new IFA_LLLCHAR(999, "RESERVED NATIONAL"));
         fieldMap.put(FieldConstants.FIELD_58, new IFA_LLLCHAR(999, "RESERVED NATIONAL"));
         fieldMap.put(FieldConstants.FIELD_59, new IFA_LLLCHAR(999, "RESERVED NATIONAL"));
@@ -141,7 +125,6 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_67, new IFA_NUMERIC(2, "EXTENDED PAYMENT CODE"));
         fieldMap.put(FieldConstants.FIELD_68, new IFA_NUMERIC(3, "RECEIVING INSTITUTION COUNTRY CODE"));
         fieldMap.put(FieldConstants.FIELD_69, new IFA_NUMERIC(3, "SETTLEMENT INSTITUTION COUNTRY CODE"));
-
         fieldMap.put(FieldConstants.FIELD_71, new IFA_NUMERIC(4, "MESSAGE NUMBER"));
         fieldMap.put(FieldConstants.FIELD_72, new IFA_NUMERIC(4, "MESSAGE NUMBER LAST"));
         fieldMap.put(FieldConstants.FIELD_73, new IFA_NUMERIC(6, "DATE ACTION"));
@@ -238,7 +221,6 @@ public class TradeRoutePackager extends ISOBasePackager {
         fieldMap.put(FieldConstants.FIELD_169, new IFA_LLLCHAR(999, "MAC 2"));
 
         fieldMap.put(FieldConstants.FIELD_171, new IFA_LLLCHAR(999, "MAC 2"));
-        fieldMap.put(FieldConstants.FIELD_172, new IFA_LLLCHAR(999, "MAC 2"));
         fieldMap.put(FieldConstants.FIELD_173, new IFA_LLLCHAR(999, "MAC 2"));
         fieldMap.put(FieldConstants.FIELD_174, new IFA_LLLCHAR(999, "MAC 2"));
         fieldMap.put(FieldConstants.FIELD_175, new IFA_LLLCHAR(999, "MAC 2"));
@@ -278,6 +260,42 @@ public class TradeRoutePackager extends ISOBasePackager {
         }
     }
 
+    private static class TradeRoute172Packager extends SimpleBasePackager {
+        private final static Map<Integer, ISOFieldPackager> fieldMap172 = new HashMap<>();
+        private final static ISOFieldPackager fld172[] = new ISOFieldPackager[37];
+
+        protected boolean emitBitMap() {
+            return (fld[0] instanceof ISOBitMapPackager);
+        }
+
+        @Override
+        protected int getFirstField() {
+            return 0;
+        }
+
+        protected ISOFieldPackager getBitMapfieldPackager() {
+            return fld[0];
+        }
+
+        @Override
+        public int unpack(ISOComponent m, byte[] b) throws ISOException {
+            return super.unpack(m, b);
+        }
+
+
+        static {
+            fieldMap172.put(FieldConstants.FIELD_0, new IFB_BITMAP(8, "Replacement Elements Extended Bit Map"));
+            fieldMap172.put(FieldConstants.FIELD_1, new IF_CHAR(15, "Replacement Card Acceptor Id Code"));
+            fieldMap172.put(FieldConstants.FIELD_2, new IF_CHAR(8, "Replacement Card Acceptor Terminal Id"));
+
+            for (int i = 0; i <= fld172.length; i++) {
+                if (fieldMap172.containsKey(i)) {
+                    fld172[i] = fieldMap172.get(i);
+                }
+            }
+        }
+    }
+
     private static class TradeRoute153Packager extends SimpleBasePackager {
         private final static Map<Integer, ISOFieldPackager> fieldMap153 = new HashMap<>();
         private final static ISOFieldPackager fld153[] = new ISOFieldPackager[37];
@@ -307,50 +325,14 @@ public class TradeRoutePackager extends ISOBasePackager {
             fieldMap153.put(FieldConstants.FIELD_2, new IFA_LLBINARY(99, "Loyalty Card Data"));
             fieldMap153.put(FieldConstants.FIELD_10, new IFA_LLLBINARY(999, "Operator Data"));
             fieldMap153.put(FieldConstants.FIELD_11, new IFA_LLLBINARY(999, "Clearing Data"));
-            fieldMap153.put(FieldConstants.FIELD_12,  new ISOBinaryFieldPackager(65536, "Payment Tokens", LiteralBinaryInterpreter.INSTANCE, new BinaryPrefixer(2)) {
-                @Override
-                public int unpack(ISOComponent c, byte[] b, int offset) throws ISOException {
-                    if (offset == b.length) {
-                        return 0;
-                    }
-                    return super.unpack(c, b, offset);
-                }
-
-                @Override
-                public byte[] pack(ISOComponent c) throws ISOException {
-                    if (c.getValue() == null) {
-                        return new byte[0];
-                    }
-                    return super.pack(c);
-                }
-
-            });// Has short length 00034FF711 =>  0003 4FF711
-
+            fieldMap153.put(FieldConstants.FIELD_12, new IF_LENGTH_BINARY(2, "Payment Tokens"));// Has short length 00034FF711 =>  0003 4FF711
             fieldMap153.put(FieldConstants.FIELD_13, new IFA_LLLLBINARY(9999, "Utility Payment Tokens"));
             fieldMap153.put(FieldConstants.FIELD_14, new IFA_LLLLBINARY(9999, "Service Station Data"));
             fieldMap153.put(FieldConstants.FIELD_15, new IFA_LLLBINARY(999, "Private Label Data"));
             fieldMap153.put(FieldConstants.FIELD_16, new IFA_LLCHAR(50, "Card Token"));
             fieldMap153.put(FieldConstants.FIELD_17, new IF_CHAR(12, "Agent Service Fee"));
             fieldMap153.put(FieldConstants.FIELD_18, new IFA_LLLBINARY(999, "Notification Information"));
-            fieldMap153.put(FieldConstants.FIELD_19,  new ISOBinaryFieldPackager(65536, "Messages", LiteralBinaryInterpreter.INSTANCE, new BinaryPrefixer(2)) {
-                @Override
-                public int unpack(ISOComponent c, byte[] b, int offset) throws ISOException {
-                    if (offset == b.length) {
-                        return 0;
-                    }
-                    return super.unpack(c, b, offset);
-                }
-
-                @Override
-                public byte[] pack(ISOComponent c) throws ISOException {
-                    if (c.getValue() == null) {
-                        return new byte[0];
-                    }
-                    return super.pack(c);
-                }
-
-            });// Has short length 00034FF711 =>  0003 4FF711
-
+            fieldMap153.put(FieldConstants.FIELD_19, new IF_LENGTH_BINARY(2, "Messages"));// Has short length 00034FF711 =>  0003 4FF711
             fieldMap153.put(FieldConstants.FIELD_20, new IFA_LLLBINARY(999, "Death Certificate Data"));
             fieldMap153.put(FieldConstants.FIELD_63, new IFA_LLLBINARY(999, "Miscellaneous"));
 
@@ -493,24 +475,7 @@ public class TradeRoutePackager extends ISOBasePackager {
             fieldMap170.put(FieldConstants.FIELD_0, new IFB_LLLHBINARY(0, "Module Name Data Array"));
             fieldMap170.put(FieldConstants.FIELD_1, new IFB_LLLHBINARY(0, "Module Stamp Data Array"));
             fieldMap170.put(FieldConstants.FIELD_2, new IF_CHAR(2, "Module Stamp Data Current Index"));
-            fieldMap170.put(FieldConstants.FIELD_3, new ISOBinaryFieldPackager(6, "Message Leg Transit TimeStamp", LiteralBinaryInterpreter.INSTANCE, new BinaryPrefixer(4)) {
-                @Override
-                public int unpack(ISOComponent c, byte[] b, int offset) throws ISOException {
-                    if (offset == b.length) {
-                        return 0;
-                    }
-                    return super.unpack(c, b, offset);
-                }
-
-                @Override
-                public byte[] pack(ISOComponent c) throws ISOException {
-                    if (c.getValue() == null) {
-                        return new byte[0];
-                    }
-                    return super.pack(c);
-                }
-
-            });// Has integer length 000000034FF711 => 00000003 4FF711
+            fieldMap170.put(FieldConstants.FIELD_3, new IF_LENGTH_BINARY(4,"Message Leg Transit TimeStamp"));// Has integer length 000000034FF711 => 00000003 4FF711
 
             for (int i = 0; i <= fld170.length; i++) {
                 if (fieldMap170.containsKey(i)) {
