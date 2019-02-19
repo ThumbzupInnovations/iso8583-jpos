@@ -262,7 +262,7 @@ public class TradeRoutePackager extends ISOBasePackager {
 
     private static class TradeRoute172Packager extends SimpleBasePackager {
         private final static Map<Integer, ISOFieldPackager> fieldMap172 = new HashMap<>();
-        private final static ISOFieldPackager fld172[] = new ISOFieldPackager[37];
+        private final static ISOFieldPackager fld172[] = new ISOFieldPackager[3];
 
         protected boolean emitBitMap() {
             return (fld[0] instanceof ISOBitMapPackager);
@@ -294,11 +294,16 @@ public class TradeRoutePackager extends ISOBasePackager {
                 }
             }
         }
+
+        TradeRoute172Packager() {
+            super();
+            setFieldPackager(fld172);
+        }
     }
 
     private static class TradeRoute153Packager extends SimpleBasePackager {
         private final static Map<Integer, ISOFieldPackager> fieldMap153 = new HashMap<>();
-        private final static ISOFieldPackager fld153[] = new ISOFieldPackager[37];
+        private final static ISOFieldPackager fld153[] = new ISOFieldPackager[64];
 
         protected boolean emitBitMap() {
             return (fld[0] instanceof ISOBitMapPackager);
@@ -334,7 +339,7 @@ public class TradeRoutePackager extends ISOBasePackager {
             fieldMap153.put(FieldConstants.FIELD_18, new IFA_LLLBINARY(999, "Notification Information"));
             fieldMap153.put(FieldConstants.FIELD_19, new IF_LENGTH_BINARY(2, "Messages"));// Has short length 00034FF711 =>  0003 4FF711
             fieldMap153.put(FieldConstants.FIELD_20, new IFA_LLLBINARY(999, "Death Certificate Data"));
-            fieldMap153.put(FieldConstants.FIELD_63, new IFA_LLLBINARY(999, "Miscellaneous"));
+            fieldMap153.put(FieldConstants.FIELD_63, new IFA_LLLCHAR(999, "Miscellaneous"));
 
             for (int i = 0; i <= fld153.length; i++) {
                 if (fieldMap153.containsKey(i)) {
