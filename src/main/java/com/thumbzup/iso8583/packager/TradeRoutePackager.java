@@ -408,7 +408,7 @@ public class TradeRoutePackager extends ISOBasePackager {
             fieldMap150.put(FieldConstants.FIELD_27, new IFA_LCHAR(8, "Transaction Sequence Counter"));
             fieldMap150.put(FieldConstants.FIELD_28, new IFA_NUMERIC(2, "Transaction Type"));
             fieldMap150.put(FieldConstants.FIELD_29, new IFB_BINARY(4, "Unpredictable Number"));
-            fieldMap150.put(FieldConstants.FIELD_30, new IFB_LLCHAR(32, "Issuer Authentication Data"));
+            fieldMap150.put(FieldConstants.FIELD_30, new IFA_LLCHAR(32, "Issuer Authentication Data"));
             fieldMap150.put(FieldConstants.FIELD_31, new IFA_LLLLBINARY(1677, "Issuer Script Template 1"));
             fieldMap150.put(FieldConstants.FIELD_32, new IFA_LLLLBINARY(1677, "Issuer Script Template 2"));
             fieldMap150.put(FieldConstants.FIELD_33, new IFB_BINARY(2, "Transaction Status Information"));
