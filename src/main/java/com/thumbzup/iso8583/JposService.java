@@ -36,6 +36,7 @@ public class JposService implements Iso8583Service {
             case BASE24:
             case AS2805:
             case POSTBRIDGE:
+            case TRADEROUTE:
                 return true;
             default:
                 return false;

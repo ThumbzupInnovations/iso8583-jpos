@@ -18,10 +18,8 @@
 package com.thumbzup.iso8583;
 
 import com.thumbzup.iso8583.exception.Iso8583Exception;
-import com.thumbzup.iso8583.packager.AS2805Packager;
-import com.thumbzup.iso8583.packager.BASE24Packager;
-import com.thumbzup.iso8583.packager.PostBridgePackager;
-import com.thumbzup.iso8583.packager.SimpleBasePackager;
+import com.thumbzup.iso8583.packager.*;
+import com.thumbzup.iso8583.packager.ISOBasePackager;
 import org.jpos.iso.*;
 
 import java.util.StringTokenizer;
@@ -54,21 +52,17 @@ class JposMessage extends ISOMsg implements Iso8583Message {
         modified = true;
     }
 
-    public JposMessage(ISOMsg value, ISOPackager packager) {
+    JposMessage(ISOMsg value, ISOPackager packager) {
         setPackager(packager);
         merge(value);
     }
 
-    public boolean hasPathField(String path) throws Iso8583Exception {
-        try {
-            return super.hasField(path);
-        } catch (ISOException e) {
-            throw new Iso8583Exception(e);
-        }
+    public boolean hasPathField(String path) {
+        return super.hasField(path);
     }
 
     private void setPackager(AcquirerProtocol protocol, int headerLength) {
-        SimpleBasePackager p;
+        ImprovedIsoPackager p;
         switch (protocol) {
             case BASE24:
                 p = new BASE24Packager();
@@ -78,6 +72,9 @@ class JposMessage extends ISOMsg implements Iso8583Message {
                 break;
             case POSTBRIDGE:
                 p = new PostBridgePackager();
+                break;
+            case TRADEROUTE:
+                p = new TradeRoutePackager();
                 break;
             default:
                 throw new IllegalArgumentException("Protocol not supported : " + protocol);
@@ -89,43 +86,27 @@ class JposMessage extends ISOMsg implements Iso8583Message {
     }
 
     @Override
-    public void setField(int no, String value) throws Iso8583Exception {
+    public void setField(int no, String value)  {
         modified = true;
-        try {
+        super.set(no, value);
+    }
+
+    @Override
+    public void setField(String path, String value)  {
+        modified = true;
+        super.set(path, value);
+    }
+
+    @Override
+    public void setField(int no, byte[] value) {
+        modified = true;
             super.set(no, value);
-        } catch (ISOException e) {
-            throw new Iso8583Exception(e);
-        }
     }
 
     @Override
-    public void setField(String path, String value) throws Iso8583Exception {
+    public void setField(String path, byte[] value) {
         modified = true;
-        try {
             super.set(path, value);
-        } catch (ISOException e) {
-            throw new Iso8583Exception(e);
-        }
-    }
-
-    @Override
-    public void setField(int no, byte[] value) throws Iso8583Exception {
-        modified = true;
-        try {
-            super.set(no, value);
-        } catch (ISOException e) {
-            throw new Iso8583Exception(e);
-        }
-    }
-
-    @Override
-    public void setField(String path, byte[] value) throws Iso8583Exception {
-        modified = true;
-        try {
-            super.set(path, value);
-        } catch (ISOException e) {
-            throw new Iso8583Exception(e);
-        }
     }
 
     @Override
@@ -165,21 +146,17 @@ class JposMessage extends ISOMsg implements Iso8583Message {
     }
 
     @Override
-    public Object getFieldValue(int no) throws Iso8583Exception {
-        try {
+    public Object getFieldValue(int no) {
             Object value = getValue(no);
             if (value instanceof ISOMsg) {
                 ISOMsg value1 = (ISOMsg) value;
-                ISOFieldPackager fieldPackager = ((SimpleBasePackager) packager).getFieldPackager(no);
+                ISOFieldPackager fieldPackager = ((ImprovedIsoPackager) packager).getFieldPackager(no);
                 if (fieldPackager instanceof ISOMsgFieldPackager) {
                     ISOMsgFieldPackager isoFieldPackager = (ISOMsgFieldPackager) fieldPackager;
                     return new JposMessage(value1, isoFieldPackager.getISOMsgPackager());
                 }
             }
             return value;
-        } catch (ISOException e) {
-            throw new Iso8583Exception(e);
-        }
     }
 
     @Override
@@ -213,7 +190,7 @@ class JposMessage extends ISOMsg implements Iso8583Message {
     @Override
     public byte[] getFieldValueAsEncoded(int no) throws Iso8583Exception {
         ISOPackager isoPackager = getPackager();
-        ISOFieldPackager fieldPackager = ((SimpleBasePackager) isoPackager).getFieldPackager(no);
+        ISOFieldPackager fieldPackager = ((ImprovedIsoPackager) isoPackager).getFieldPackager(no);
         try {
             return fieldPackager.pack(getComponent(no));
         } catch (ISOException e) {
@@ -225,7 +202,7 @@ class JposMessage extends ISOMsg implements Iso8583Message {
     public byte[] getFieldValueAsEncoded(String path) throws Iso8583Exception {
         //TODO : test
         ISOPackager isoPackager = getPackager();
-        ISOFieldPackager fieldPackager = ((SimpleBasePackager) isoPackager).getFieldPackager(path);
+        ISOFieldPackager fieldPackager = ((ImprovedIsoPackager) isoPackager).getFieldPackager(path);
         try {
             return fieldPackager.pack(getComponent(path));
         } catch (ISOException e) {
