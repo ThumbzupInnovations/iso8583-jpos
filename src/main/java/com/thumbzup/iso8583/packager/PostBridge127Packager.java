@@ -27,7 +27,7 @@ import java.util.Map;
 class PostBridge127Packager extends SimpleBasePackager {
 
     private final static Map<Integer, ISOFieldPackager> fieldMap127 = new HashMap<>();
-    private final static ISOFieldPackager fld127[] = new ISOFieldPackager[25 + 1];
+    private final static ISOFieldPackager fld127[] = new ISOFieldPackager[49 + 1];
 
     static {
         fieldMap127.put(FieldConstants.FIELD_0, new IF_CHAR(0, "PLACEHOLDER"));
@@ -55,9 +55,10 @@ class PostBridge127Packager extends SimpleBasePackager {
         fieldMap127.put(FieldConstants.FIELD_22, new IFA_LLLLLCHAR(99999, "STRUCTURED DATA"));
         fieldMap127.put(FieldConstants.FIELD_23, new IF_CHAR(253, "PAYEE NAME AND ADDRESS"));
         fieldMap127.put(FieldConstants.FIELD_24, new IFA_LLCHAR(28, "PAYER ACCOUNT INFORMATION"));
-        // fieldMap127.put(FieldConstants.FIELD_25, new IFA_LLLLCHAR(8000, "ICC DATA"));
-        fieldMap127.put(FieldConstants.FIELD_25, new ISOMsgFieldPackager(new IFA_LLLLCHAR(8000, "ICC DATA"), new PostBridge127_25Packager()));       
-        
+        fieldMap127.put(FieldConstants.FIELD_25, new ISOMsgFieldPackager(new IFA_LLLLCHAR(8000, "ICC DATA"), new PostBridge127_25Packager()));
+        fieldMap127.put(FieldConstants.FIELD_49, new ISOMsgFieldPackager(new IFA_LLLCHAR(999, "Card Acceptor Additional Data"), new PostBridge127_49Packager()));
+
+
         for (int i = 0; i <= fld127.length; i++) {
             if (fieldMap127.containsKey(i)) {
                 fld127[i] = fieldMap127.get(i);
