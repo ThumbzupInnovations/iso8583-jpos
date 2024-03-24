@@ -33,13 +33,9 @@ class PostBridge127_49Packager extends SimpleBasePackager {
         fieldMap127_49.put(FieldConstants.FIELD_0, new IF_CHAR(0, "PLACEHOLDER"));
         fieldMap127_49.put(FieldConstants.FIELD_2, new IFA_LLLCHAR(16, "Card Acceptor Phone Number"));
         fieldMap127_49.put(FieldConstants.FIELD_3, new IFA_LLLCHAR(48, "Street Address"));
-        fieldMap127_49.put(FieldConstants.FIELD_4, new IFA_LLLCHAR(16, "Retailer Phone Number"));
         fieldMap127_49.put(FieldConstants.FIELD_5, new IF_CHAR(3, "Country Subdivision Code"));
         fieldMap127_49.put(FieldConstants.FIELD_6, new IFA_LLLCHAR(255, "URL"));
         fieldMap127_49.put(FieldConstants.FIELD_7, new IFA_LLLCHAR(16, "Customer Service Phone Number"));
-        fieldMap127_49.put(FieldConstants.FIELD_8, new IFA_LLLCHAR(25, "Additional Contact Information"));
-        fieldMap127_49.put(FieldConstants.FIELD_9, new IF_CHAR(21, "Tax ID"));
-        fieldMap127_49.put(FieldConstants.FIELD_10, new IFA_LLLCHAR(6, "Partner ID Code"));
         fieldMap127_49.put(FieldConstants.FIELD_11, new IFA_LLLCHAR(13, "Service Location City Name"));
         fieldMap127_49.put(FieldConstants.FIELD_12, new IF_CHAR(3, "Service Location Country Subdivision Code"));
         fieldMap127_49.put(FieldConstants.FIELD_13, new IF_CHAR(3, "Service Location Country Code"));
